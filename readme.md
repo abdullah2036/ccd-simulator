@@ -121,29 +121,6 @@ Provides actionable engineering insights:
 
 ---
 
-## 🎓 For Hackathon Judges
-
-### Technical Highlights
-- **Multi-layer approach**: Combines NLP extraction with physics-based simulation
-- **Industry standards**: Based on NACE/API corrosion models
-- **Realistic outputs**: Time-to-failure predictions with confidence intervals
-- **Actionable insights**: Engineering recommendations, not just compliance checks
-
-### Innovation
-- **Simulation-verified audits** instead of simple text parsing
-- **Proactive risk identification** before asset construction
-- **Visual degradation curves** showing predicted failure points
-- **Random document generation** for testing and demonstration
-
-### Easy to Run & Demo
-- Simple Python/Streamlit stack (no React/JS complexity)
-- Runs on any device with Python
-- Sample documents built-in
-- No database or external services needed
-- Clear, organized code structure
-
----
-
 ## 🐛 Troubleshooting
 
 ### Port already in use
