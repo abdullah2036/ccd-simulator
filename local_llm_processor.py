@@ -1,8 +1,4 @@
-"""
-Local LLM Document Processor
-Provides offline capability using lightweight local models
-Ensures privacy and works without internet connectivity
-"""
+
 
 import re
 import os
@@ -18,7 +14,6 @@ class LocalLLMProcessor:
         self.model = None
         self.tokenizer = None
         
-        # Try to load transformers library
         try:
             from transformers import pipeline, AutoTokenizer, AutoModelForTokenClassification
             self.use_transformers = True
@@ -32,11 +27,8 @@ class LocalLLMProcessor:
         try:
             from transformers import pipeline
             
-            # Use a small, efficient model for NER
-            # This model is ~400MB and works well for technical text
             model_name = "dslim/bert-base-NER"
             
-            # Check if model is cached locally
             cache_dir = os.path.expanduser("~/.cache/huggingface/transformers")
             
             print("Loading local NER model for offline processing...")
@@ -44,7 +36,7 @@ class LocalLLMProcessor:
                 "ner",
                 model=model_name,
                 aggregation_strategy="simple",
-                device=-1  # CPU only for compatibility
+                device=-1  
             )
             print("✓ Local NER model loaded successfully")
             
@@ -59,7 +51,6 @@ class LocalLLMProcessor:
             return self._extract_rule_based(text)
         
         try:
-            # Run NER
             entities = self.ner_pipeline(text)
             
             # Extract parameters based on entities
@@ -75,13 +66,9 @@ class LocalLLMProcessor:
                 'confidence': {}
             }
             
-            # Enhance with rule-based extraction (transformers + rules = best)
             rule_based = self._extract_rule_based(text)
-            
-            # Combine results (rule-based is more reliable for technical specs)
             params.update(rule_based)
             
-            # Add confidence from NER
             params['confidence']['extraction_method'] = 'transformer_enhanced'
             
             return params
@@ -105,12 +92,11 @@ class LocalLLMProcessor:
             'temperature': 60,
             'h2s_pressure': 0.5,
             'confidence': {},
-            'flow_velocity': 2.0  # Default
+            'flow_velocity': 2.0 
         }
         
         text_lower = document_text.lower()
         
-        # Material detection with enhanced patterns
         material_patterns = [
             (r'super\s+duplex\s+stainless', 'duplex_stainless', 0.98),
             (r'duplex\s+stainless|uns\s+s3\d{4}', 'duplex_stainless', 0.95),
@@ -157,9 +143,7 @@ class LocalLLMProcessor:
                 params['confidence']['environment'] = confidence
                 break
         
-        # Numeric extractions with multiple patterns
         
-        # Design life
         life_patterns = [
             r'design\s+life[:\s]+(\d+)\s+years?',
             r'service\s+life[:\s]+(\d+)\s+years?',
