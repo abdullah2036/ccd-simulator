@@ -2,8 +2,8 @@ import math
 
 class CorrosionEngine:
     """
-    Physics-based corrosion rate calculation engine
-    Based on NACE/API empirical models
+    Hybrid Physics-ML Corrosion Rate Calculation Engine
+    Combines empirical models with ML-enhanced predictions
     """
     
     # Base corrosion rates (mm/year) for different materials in various environments
@@ -60,26 +60,63 @@ class CorrosionEngine:
         return factors.get(coating_type, 1.0)
     
     @staticmethod
-    def calculate_corrosion_rate(params):
-        """Calculate effective corrosion rate"""
+    def calculate_corrosion_rate(params, use_ml=True):
+        """
+        Calculate effective corrosion rate
+        
+        Args:
+            params: dict of parameters
+            use_ml: bool, whether to use ML enhancement
+        
+        Returns:
+            dict with rate, method used, and confidence
+        """
         material = params['material']
         environment = params['environment']
         
-        # Get base rate
+        # Get base rate (physics-based)
         base_rate = 0.5  # Default fallback
         if material in CorrosionEngine.BASE_RATES:
             if environment in CorrosionEngine.BASE_RATES[material]:
                 base_rate = CorrosionEngine.BASE_RATES[material][environment]
         
-        # Apply correction factors
+        # Apply standard correction factors
         temp_factor = CorrosionEngine.temp_correction(params['temperature'])
         h2s_factor = CorrosionEngine.h2s_correction(params['h2s_pressure'])
         coating_factor = CorrosionEngine.coating_factor(params['coating'])
         
-        # Calculate effective rate
-        effective_rate = base_rate * temp_factor * h2s_factor * coating_factor
+        # Calculate physics-based rate
+        physics_rate = base_rate * temp_factor * h2s_factor * coating_factor
         
-        return effective_rate
+        # ML Enhancement
+        ml_rate = physics_rate
+        ml_confidence = 0.0
+        method = 'physics'
+        
+        if use_ml:
+            try:
+                from ml_predictor import MLCorrosionPredictor
+                
+                ml_model = MLCorrosionPredictor()
+                ml_multiplier = ml_model.predict_corrosion_multiplier(params)
+                ml_confidence = ml_model.get_prediction_confidence(params)
+                
+                # Hybrid approach: blend physics and ML
+                # Weight more towards ML if confidence is high
+                blend_weight = ml_confidence * 0.6  # Max 60% ML influence
+                ml_rate = physics_rate * ((1 - blend_weight) + blend_weight * ml_multiplier)
+                method = 'hybrid_physics_ml'
+                
+            except Exception as e:
+                print(f"ML enhancement unavailable: {e}")
+                method = 'physics'
+        
+        return {
+            'rate': ml_rate,
+            'physics_rate': physics_rate,
+            'method': method,
+            'ml_confidence': ml_confidence
+        }
     
     @staticmethod
     def generate_time_series(initial_thickness, corrosion_rate, design_life):
@@ -99,10 +136,16 @@ class CorrosionEngine:
         return data
     
     @staticmethod
-    def calculate_corrosion(params):
-        """Main calculation function"""
+    def calculate_corrosion(params, use_ml=True):
+        """
+        Main calculation function with ML enhancement
+        
+        Returns:
+            dict with comprehensive results
+        """
         # Calculate corrosion rate
-        corrosion_rate = CorrosionEngine.calculate_corrosion_rate(params)
+        rate_result = CorrosionEngine.calculate_corrosion_rate(params, use_ml)
+        corrosion_rate = rate_result['rate']
         
         # Calculate time to minimum thickness
         thickness_loss_allowed = params['initial_thickness'] - params['min_thickness']
@@ -117,6 +160,9 @@ class CorrosionEngine:
         
         return {
             'corrosion_rate': corrosion_rate,
+            'physics_rate': rate_result['physics_rate'],
             'time_to_failure': time_to_failure,
-            'time_series': time_series
+            'time_series': time_series,
+            'method': rate_result['method'],
+            'ml_confidence': rate_result['ml_confidence']
         }
