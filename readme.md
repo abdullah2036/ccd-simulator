@@ -162,60 +162,6 @@ Access via sidebar → "Advanced Settings":
 
 ---
 
-## 🏆 Hackathon Judging Criteria Alignment
-
-### 1. Innovation & Creativity (30%)
-
-✅ **Multi-Layer AI Approach**
-- Combines traditional physics with modern ML
-- Not just text parsing - actual predictive simulation
-- Local LLM option shows technical depth
-
-✅ **Novel Application**
-- Shifts from compliance checking to proactive risk prediction
-- Financial quantification of technical risks
-- Unique in the corrosion control space
-
-### 2. Technical Complexity (25%)
-
-✅ **Advanced Technologies**
-- Random Forest regression with physics-informed training
-- Empirical corrosion models (NACE/API standards)
-- Optional transformer-based NER
-- Financial modeling with risk assessment
-
-✅ **Robust Implementation**
-- Hybrid approach (ML + physics)
-- Graceful degradation (works without ML/transformers)
-- Auto-training on first run
-
-### 3. Business Impact & Feasibility (25%)
-
-✅ **Clear ROI Demonstration**
-- Quantified cost of failure
-- Payback period calculations
-- Net Present Value analysis
-
-✅ **Real-World Applicability**
-- Offline capability for remote sites
-- Privacy-preserving for confidential data
-- Industry-standard cost parameters
-
-### 4. Presentation & Documentation (20%)
-
-✅ **Professional Output**
-- Beautiful Streamlit interface
-- Clear visualizations
-- Comprehensive reports
-- Financial impact summaries
-
-✅ **Complete Documentation**
-- Detailed README
-- Code comments
-- Usage instructions
-
----
-
 ## 🧪 Testing with Sample Documents
 
 The app includes realistic sample generators:
@@ -294,30 +240,6 @@ Rule-based extraction works perfectly without it!
 
 ---
 
-## 🎓 For Judges & Reviewers
-
-### Key Differentiators
-
-1. **Hybrid Intelligence**: Physics + ML, not just one or the other
-2. **Financial Quantification**: Transforms technical → business case
-3. **Privacy-First**: Offline capability for sensitive data
-4. **Production-Ready**: Graceful degradation, comprehensive error handling
-
-### Innovation Highlights
-
-- **Multi-modal approach**: Empirical formulas refined by ML
-- **Risk monetization**: CoF and ROI calculations
-- **Edge computing**: Works without cloud dependencies
-- **Realistic impact**: Industry-standard cost models
-
-### Demonstration Tips
-
-1. Run all three sample types (Critical/Moderate/Acceptable)
-2. Show financial differences ($8M vs $500K exposure)
-3. Highlight ML confidence scores
-4. Emphasize offline capability for security
-
----
 
 ## 📝 Dependencies
 
